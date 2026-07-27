@@ -1,6 +1,25 @@
+function score(k, font) {
+  let score = k.add([  
+    k.z(9),
+    k.text('000000000', font),
+    k.pos(10,219),
+    'score',
+    { 
+      value: 0,
+      inc(x) {
+        this.value += x;
+        this.text = '0'.repeat(9 - Math.log10(this.value)) + this.value;
+      }
+    }
+  ]);
+  return 
+}
+
+
 export default function(k) {
-  // z(8) == hud background
-  // z(9) == hud elements
+  // z(8) == overlay background
+  // z(9) == overlay elements 
+
   k.add([
     k.z(8),
     k.rect(56, 240),
@@ -14,19 +33,14 @@ export default function(k) {
     k.color(0, 0, 0)
   ]);
 
+
   let font = { 
     size: 6,
     font: 'Regule5',
     letterSpacing: 0
   };
 
-  k.add([  
-    k.z(9),
-    k.text('000000000', font),
-    k.pos(10,219),
-    'score',
-    { value: 0 }
-  ])
+  score(k, font);
 
   k.add([
     k.z(9),

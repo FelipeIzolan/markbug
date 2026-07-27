@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "gamejam": "vite preview --outDir ./game_jam"
   },
   "devDependencies": {
     "vite": "^8.1.1"

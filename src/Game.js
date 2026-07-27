@@ -34,8 +34,7 @@ class Game {
   }
 
   scene(name, callback) {
-    callback = callback.bind(this.k)
-    this.k.scene(name, callback)
+    this.k.scene(name, payload => callback(this.k, payload))
   }
 }
 

@@ -1,6 +1,8 @@
 import './style.css';
 
 import Game from './Game.js';
+
+import TitleScreen from './scenes/TitleScreen.js';
 import Gameplay from './scenes/Gameplay.js';
 
 const canvas = document.querySelector('canvas');
@@ -26,10 +28,15 @@ game.load([
   ['purple-hud-2', '/purple-hud-2.png'],
   ['purple-hud-3', '/purple-hud-3.png'],
   // -- ENEMIES
+  ['enemy-1', '/enemy-1.png'],
+  ['enemy-2', '/enemy-2.png'],
+  ['enemy-3', '/enemy-3.png'],
   // SOUNDS
   // FONTS
   ['Regule5', '/Regule5.otf']
 ]);
 
+game.scene('title-screen', TitleScreen); 
 game.scene('gameplay', Gameplay); 
+
 game.k.go('gameplay');

@@ -3,44 +3,37 @@ import { clamp } from '../Math.js';
 export default function(k) {
   const player = k.add([
     k.sprite('player'),
-    k.pos (125, 218),
+    k.pos(125, 218),
+    k.area({ shape: new k.Rect(k.vec2(0, 0), 6, 6) }),
     'player',
     {
-      // POS (float) 
-      x: 125,
-      y: 218,
-      // STATUS
       hp: 20,
       dmg: 2,
       spd: 32,
-      rps: 3,
-      // TIMER
-      T_rps: 0,
-      // BOUNDS
-      bounds: { 
-        x: 0,
-        y: 0,
-        w: 6, 
-        h: 6
-      }
+      rps: 3, 
     }
-  ])
+  ]);
+
+  player.pos.dx = player.pos.x;
+  player.pos.dy = player.pos.y; 
 
   function move(key, s, e) {
     let dir = k[key.toUpperCase()];
-    let axis = dir.x != 0 ? 'x' : 'y';
-    player[axis] = clamp(
-      player[axis] + player.spd * dir[axis] * k.dt(),
-      s - player.bounds[axis],
-      e - player.bounds[axis == 'x' ? 'w' : 'h']
+    let a = dir.x != 0 ? 'x' : 'y';
+    let da = 'd' + a;
+    player.pos[da] = clamp(
+      player.pos[da] + player.spd * dir[a] * k.dt(),
+      s - player.area.offset[a],
+      e - player.area.shape[a == 'x' ? 'width' : 'height']
     );
-    player.pos[axis] = Math.trunc(player[axis]);
+    player.pos[a] = Math.trunc(player.pos[da]);
   }
 
   function bullet(x, y, spd) {
     k.add([
-      k.pos(player.pos.x + x, player.pos.y + y),
+      k.area(),
       k.rect(1, 3),
+      k.pos(player.pos.x + x, player.pos.y + y),
       k.color(225, 140, 250),
       k.move(270, spd),
       k.offscreen({ destroy: true, distance: 1 }),
@@ -132,17 +125,18 @@ export default function(k) {
       let dt = k.dt();
       let pu = player.get('purple');
 
-      if (!pu[0].opacity) {
-        player.T_rps -= dt;
-        if (player.T_rps <= 0) {
+      let u1 = pu[0]; 
+      if (!u1.opacity) {
+        u1.T_rps -= dt;
+        if (u1.T_rps <= 0) {
           bullet(2.5, -3, 200);
-          player.T_rps = 1 / player.rps;
-        }
+          u1.T_rps = 1 / player.rps;
+        } 
       }
-
+      
       for (let i in pu) {
         let u = pu[i];
-        if (u.opacity < 1)
+        if (!u.opacity)
           continue;
         u.T_rps -= dt;
         if (u.T_rps <= 0) {
