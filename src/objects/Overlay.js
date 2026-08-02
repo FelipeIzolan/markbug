@@ -1,5 +1,5 @@
 function score(k, font) {
-  let score = k.add([  
+  return k.add([  
     k.z(9),
     k.text('000000000', font),
     k.pos(10,219),
@@ -12,14 +12,9 @@ function score(k, font) {
       }
     }
   ]);
-  return 
 }
 
-
 export default function(k) {
-  // z(8) == overlay background
-  // z(9) == overlay elements 
-
   k.add([
     k.z(8),
     k.rect(56, 240),

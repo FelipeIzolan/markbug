@@ -1,5 +1,6 @@
 export default function(k, x, y) {
-  const enemy = k.add([ 
+  const enemy = k.add([
+    k.z(1),
     k.sprite('enemy-' + (Math.floor(Math.random() * 3) + 1)),
     k.pos(x, y),
     k.area(),
