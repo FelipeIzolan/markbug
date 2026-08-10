@@ -1,7 +1,17 @@
-export default function(k, x, y) {
+
+/*
+{
+  curr: 0 // index
+  states: []
+}
+*/
+
+
+
+export default function(k, x, y, sprite, states) {
   const enemy = k.add([
     k.z(1),
-    k.sprite('enemy-' + (Math.floor(Math.random() * 3) + 1)),
+    k.sprite(sprite),
     k.pos(x, y),
     k.area(),
     'enemy',
@@ -10,6 +20,10 @@ export default function(k, x, y) {
       dmg: 2,
       spd: 32,
       rps: 3, 
+      machine: {
+        curr: 0,
+        states
+      }
     }
   ]);
 
@@ -21,6 +35,10 @@ export default function(k, x, y) {
   
   enemy.onCollide('bullet', obj => {
     obj.destroy();
+  });
+
+  enemy.onUpdate(() => {
+
   });
 
   return enemy;
