@@ -1,44 +1,24 @@
-
-/*
-{
-  curr: 0 // index
-  states: []
-}
-*/
-
-
+import status from '../components/Status.js';
 
 export default function(k, x, y, sprite, states) {
   const enemy = k.add([
     k.z(1),
-    k.sprite(sprite),
     k.pos(x, y),
-    k.area(),
+    k.area({ isSensor: true }),
+    k.sprite(sprite),
+    status(8, 2, 32, 3),
     'enemy',
     {
-      hp: 8,
-      dmg: 2,
-      spd: 32,
-      rps: 3, 
       machine: {
         curr: 0,
         states
       }
     }
-  ]);
+  ]); 
 
-  enemy.pos.dx = enemy.pos.x;
-  enemy.pos.dy = enemy.pos.y; 
-
-  const player = k.get('player')[0];
-  const score = k.get('score')[0];
-  
-  enemy.onCollide('bullet', obj => {
+  enemy.onCollide('p-shoot', obj => {
+    enemy.hit(obj.dmg);
     obj.destroy();
-  });
-
-  enemy.onUpdate(() => {
-
   });
 
   return enemy;

@@ -1,3 +1,4 @@
-canvas {
-  image-rendering: pixelated;
+body {
+  display: grid;
+  place-items: center;
 }

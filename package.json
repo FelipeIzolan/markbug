@@ -13,6 +13,6 @@
     "vite": "^8.1.1"
   },
   "dependencies": {
-    "kaplay": "^3001.0.19"
+    "kaplay": "^4000.0.0-alpha.27.1"
   }
 }

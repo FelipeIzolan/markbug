@@ -1,58 +1,76 @@
-import { clamp } from '../Math.js';
+import Shoot from './Shoot.js';
+import status from '../components/Status.js';
 
 export default function(k) {
   const player = k.add([
     k.z(1),    
     k.sprite('player'),
-    k.pos(125, 218),
+    k.pos(48, 160),
     k.area({ shape: new k.Rect(k.vec2(0, 0), 6, 6) }),
+    status(20, 2, 40, 6),
     'player',
     {
-      hp: 20,
-      dmg: 2,
-      spd: 40,
-      rps: 3,
       timer: 0,
       upgrades: {
-        purple: [],
+        purple: 3,
         green: 0
       }
     }
   ]);
 
-  player.pos.dx = player.pos.x;
-  player.pos.dy = player.pos.y; 
-  
-  function moveX(dir, m, dt) {
-    player.pos.dx = clamp(
-      player.pos.dx + player.spd * m * dir * dt,
-      56 - player.area.offset.x,
-      200 - player.area.shape.width
-    );
-    player.pos.x = Math.trunc(player.pos.dx);
-  }
+  player.onKeyDown('z', () => {
+    let dt = k.dt();
+    let offset = [
+      0, 3,
+      -3, 6,
+      -5, 8
+    ];
+    player.timer -= dt;
+    if (player.timer <= 0) {
+      Shoot(
+        k,
+        player.pos.add(k.vec2(1, -3)),
+        player.dmg * 2,
+        200,
+        270,
+        'purple-shoot-1',
+        'p-shoot'
+      ); 
+      for (let i = 0; i < player.upgrades.purple; i++) {
+        let a = i * 2;
+        for (let j = 0; j < 2; j++) {
+          Shoot(
+            k,
+            player.pos.add(k.vec2(offset[a + j], -5 + a)),
+            player.dmg,
+            player.spd + 160 - 8 * i,
+            270,
+            'purple-shoot-2',
+            'p-shoot'
+          );
+        } 
+      }
+      player.timer = 1 / player.rps;
+    }
+  });
 
-  function moveY(dir, m, dt) {
-    player.pos.dy = clamp(
-      player.pos.dy + player.spd * m * dir * dt,
-      -player.area.offset.y,
-      240 - player.area.shape.height
-    );
-    player.pos.y = Math.trunc(player.pos.dy);
-  }
-
-  function bullet(x, y, spd) {
-    k.add([
-      k.z(0),
-      k.area(),
-      k.rect(1, 3),
-      k.pos(player.pos.x + x, player.pos.y + y),
-      k.color(225, 140, 250),
-      k.move(270, spd),
-      k.offscreen({ destroy: true, distance: 8 }),
-      'bullet'
-    ]);
-  }
+  player.onKeyDown(['left', 'right', 'up', 'down'], key => {
+    let dir = k[key.toUpperCase()];
+    let spd = k.isKeyDown('z') ? player.spd / 2 : player.spd;
+    player.move(dir.scale(spd));
+    if (key == 'left' || key == 'right')
+      player.pos.x = k.clamp(
+        player.pos.x,
+        32 - player.area.offset.x,
+        128 - player.area.shape.width
+      );
+    else
+      player.pos.y = k.clamp(
+        player.pos.y,
+        -player.area.offset.y,
+        192 - player.area.shape.height
+      );
+  });
 
   player.onDraw(() => {
     if (player.upgrades.green >= 1)
@@ -63,70 +81,29 @@ export default function(k) {
     if (player.upgrades.green >= 2)
       k.drawSprite({
         sprite: 'green-2',
-        pos: k.vec2(-3, 5)
+        pos: k.vec2(-2, 5)
       });
     if (player.upgrades.green >= 3)
       k.drawSprite({
         sprite: 'green-3',
-        pos: k.vec2(-2, 0)
+        pos: k.vec2(-4, 6)
       });
-    if (player.upgrades.purple.length >= 1)
+    if (player.upgrades.purple >= 1)
       k.drawSprite({
         sprite: 'purple-1',
         pos: k.vec2(0, -2)
       });
-    if (player.upgrades.purple.length >= 2)
+    if (player.upgrades.purple >= 2)
       k.drawSprite({
         sprite: 'purple-2',
         pos: k.vec2(-2, -1)
       });
-    if (player.upgrades.purple.length >= 3)
+    if (player.upgrades.purple >= 3)
       k.drawSprite({
         sprite: 'purple-3',
         pos: k.vec2(-4, 1)
       });
   });
-
-  player.onUpdate(() => {
-    let dt = k.dt();
-    let shooting = k.isKeyDown('z');
-    let m = shooting ? 0.5 : 1;
-    if (k.isKeyDown('left'))
-      moveX(-1, m, dt);
-    if (k.isKeyDown('right'))
-      moveX(1, m, dt);
-    if (k.isKeyDown('up'))
-      moveY(-1, m, dt);
-    if (k.isKeyDown('down'))
-      moveY(1, m, dt);
-    if (shooting) {
-      if (!player.upgrades.purple.length) {
-        player.timer -= dt;
-        if (player.timer <= 0) {
-          bullet(2.5, 0, 200);
-          player.timer = 1 / player.rps;
-        }
-      } else {
-        let offset = [
-          1, 4,
-          -2, 7,
-          -4, 9
-        ];
-        for (let i = 0; i < player.upgrades.purple.length; i++) {
-          player.upgrades.purple[i] -= dt;
-          if (player.upgrades.purple[i] <= 0) {
-            let a = i * 2;
-            let b = i + 1;
-            let y = -5 + a;
-            let spd = player.spd + 100 + 25 * b;
-            bullet(offset[a], y, spd);
-            bullet(offset[a + 1], y, spd);
-            player.upgrades.purple[i] = 1 / (player.rps + b);
-          }
-        }
-      }
-    }
-  });
-
+  
   return player;
 }

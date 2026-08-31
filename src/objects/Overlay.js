@@ -1,91 +1,65 @@
-function score(k, font) {
-  return k.add([  
-    k.z(9),
-    k.text('000000000', font),
-    k.pos(10,219),
-    'score',
-    { 
-      value: 0,
-      inc(x) {
-        this.value += x;
-        this.text = '0'.repeat(9 - Math.log10(this.value)) + this.value;
-      }
-    }
-  ]);
-}
-
 export default function(k) {
-  k.add([
-    k.z(8),
-    k.rect(56, 240),
-    k.color(0, 0, 0)
-  ]);
-  
-  k.add([
-    k.z(8),
-    k.pos(200, 0),
-    k.rect(56, 240),
-    k.color(0, 0, 0)
-  ]);
-
-
-  let font = { 
-    size: 6,
-    font: 'Regule5',
-    letterSpacing: 0
-  };
-
-  score(k, font);
-
-  k.add([
-    k.z(9),
-    k.text('HP: 20\nDMG: 02\nSPD: 32\nRPS: 03', font),
-    k.pos(10, 16),
-    'status'
-  ]);
-  
-  k.add([
-    k.z(9),
-    k.sprite('purple-4'),
-    k.pos(10, 55)
-  ]);
-
-  k.add([
-    k.z(9),
-    k.sprite('green-4'),
-    k.pos(10, 64)
-  ]);
-
-  k.add([
-    k.z(9),
-    k.text('0', font),
-    k.pos(19, 56),
-    'purple-count'
-  ]); 
-  
-  k.add([
-    k.z(9),
-    k.text('0', font),
-    k.pos(19, 65),
-    'green-count'
-  ]);
-  
-  function upgrade(index) {
-    for (const color of ['purple', 'green']) {
-      let x = 10 + 6 * index;
-      let y = 41 + (color == 'green' ? 7 : 0);
-      let tag = color + '-hud-' + (index + 1);
-      k.add([
-        k.z(9),
-        k.opacity(0.4),
-        k.sprite(tag),
-        k.pos(x, y),
-        tag
-      ]);
-    }
-  }
-
-  upgrade(0);
-  upgrade(1);
-  upgrade(2);
+  let container = k.add([ k.z(8) ]);
+  container.onDraw(() => { 
+    k.drawRect({
+      width: 32,
+      height: 192,
+      pos: k.vec2(0, 0),
+      color: k.BLACK
+    });
+    k.drawRect({
+      width: 32,
+      height: 192,
+      pos: k.vec2(128, 0),
+      color: k.BLACK
+    });
+    k.drawSprite({
+      sprite: "hp",
+      pos: k.vec2(4, 4)
+    });
+    k.drawSprite({
+      sprite: "dmg",
+      pos: k.vec2(4, 12)
+    });
+    k.drawSprite({
+      sprite: "spd",
+      pos: k.vec2(4, 20)
+    });
+    k.drawSprite({
+      sprite: "rps",
+      pos: k.vec2(4, 28)
+    });
+    k.drawSprite({
+      sprite: "upgrade-1",
+      pos: k.vec2(132, 4)
+    });
+    k.drawSprite({
+      sprite: "upgrade-2",
+      pos: k.vec2(138, 4)
+    });
+    k.drawSprite({
+      sprite: "upgrade-3",
+      pos: k.vec2(144, 4)
+    });
+    k.drawSprite({
+      sprite: "upgrade-4",
+      pos: k.vec2(132, 10)
+    });
+    k.drawSprite({
+      sprite: "upgrade-5",
+      pos: k.vec2(138, 10)
+    });
+    k.drawSprite({
+      sprite: "upgrade-6",
+      pos: k.vec2(144, 10)
+    });
+    k.drawSprite({
+      sprite: "purple-4",
+      pos: k.vec2(132, 16)
+    });
+    k.drawSprite({
+      sprite: "green-4",
+      pos: k.vec2(132, 24)
+    });
+  });
 }
