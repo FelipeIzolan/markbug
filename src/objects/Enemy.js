@@ -1,3 +1,4 @@
+import machine from '../components/Machine.js';
 import status from '../components/Status.js';
 
 export default function(k, x, y, sprite, states) {
@@ -7,18 +8,18 @@ export default function(k, x, y, sprite, states) {
     k.area({ isSensor: true }),
     k.sprite(sprite),
     status(8, 2, 32, 3),
+    machine(k, states),
     'enemy',
-    {
-      machine: {
-        curr: 0,
-        states
-      }
-    }
+    {}
   ]); 
 
-  enemy.onCollide('p-shoot', obj => {
+  enemy.onCollide('p-shot', obj => {
     enemy.hit(obj.dmg);
     obj.destroy();
+  });
+
+  enemy.onUpdate(() => {
+
   });
 
   return enemy;

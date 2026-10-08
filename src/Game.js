@@ -6,7 +6,6 @@ class Game {
       width,
       height,
       canvas,
-      crisp: true,
       letterbox: true,
       global: false
     });
@@ -50,6 +49,7 @@ class Game {
 
   start(scene) {
     this.k.onLoad(() => {
+      this.k.setCursor('none');
       this.k.go(scene);
     });
   }

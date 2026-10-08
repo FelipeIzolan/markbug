@@ -1,5 +1,5 @@
 export default function (k, vec2, dmg, spd, angle, sprite, tag) {
-  let shoot = k.add([
+  let shot = k.add([
     k.pos(vec2),
     k.area({ isSensor: true }),
     k.move(angle, spd),
@@ -9,5 +9,5 @@ export default function (k, vec2, dmg, spd, angle, sprite, tag) {
     { dmg }
   ]);
 
-  return shoot;
+  return shot;
 }

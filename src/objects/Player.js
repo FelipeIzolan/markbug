@@ -1,4 +1,4 @@
-import Shoot from './Shoot.js';
+import Shot from './Shot.js';
 import status from '../components/Status.js';
 
 export default function(k) {
@@ -12,12 +12,12 @@ export default function(k) {
     {
       timer: 0,
       upgrades: {
-        purple: 3,
+        purple: 0,
         green: 0
       }
     }
   ]);
-
+  
   player.onKeyDown('z', () => {
     let dt = k.dt();
     let offset = [
@@ -27,26 +27,26 @@ export default function(k) {
     ];
     player.timer -= dt;
     if (player.timer <= 0) {
-      Shoot(
+      Shot(
         k,
         player.pos.add(k.vec2(1, -3)),
         player.dmg * 2,
         200,
         270,
         'purple-shoot-1',
-        'p-shoot'
+        'p-shot'
       ); 
       for (let i = 0; i < player.upgrades.purple; i++) {
         let a = i * 2;
         for (let j = 0; j < 2; j++) {
-          Shoot(
+          Shot(
             k,
             player.pos.add(k.vec2(offset[a + j], -5 + a)),
             player.dmg,
             player.spd + 160 - 8 * i,
             270,
             'purple-shoot-2',
-            'p-shoot'
+            'p-shot'
           );
         } 
       }

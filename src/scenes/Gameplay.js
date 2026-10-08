@@ -9,13 +9,15 @@ import Overlay from '../objects/Overlay.js';
 
 export default function (k, payload) {
   k.add([
+    k.z(0),
     k.pos(32, 0),
     k.rect(96, 192),
     k.color(12, 12, 12)
   ]);
-  const player = Player(k);
-  const overlay = Overlay(k);
 
-  Enemy(k, 56, 16, 'enemy-1', []);
-  Enemy(k, 80, 16, 'enemy-1', []);
+  const overlay = Overlay(k);
+  const player = Player(k);
+
+//   Enemy(k, 48, 32, 'enemy-1', { ..._test });
+//   Enemy(k, 61, 32, 'enemy-1', { ..._test });
 }
